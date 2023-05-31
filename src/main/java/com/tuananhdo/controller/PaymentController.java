@@ -1,16 +1,24 @@
-package com.tuananhdo.api.controller;
+package com.tuananhdo.controller;
 
+import com.tuananhdo.dto.OrderRequest;
+import com.tuananhdo.dto.OrderResponse;
+import com.tuananhdo.exception.PaymentException;
+import com.tuananhdo.service.OrderService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/payment")
 public class PaymentController {
 
-    @GetMapping
-    public ResponseEntity<String> responsePayment() {
-        return ResponseEntity.ok("Hello Pyament API");
+    private final OrderService orderService;
+
+    public PaymentController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @PostMapping
+    public ResponseEntity<OrderResponse> createPayment(@RequestBody OrderRequest orderRequest) throws PaymentException {
+        return ResponseEntity.ok(orderService.placeOrder(orderRequest));
     }
 }
